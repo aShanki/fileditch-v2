@@ -9,6 +9,8 @@ services:
       - MONGODB_URI=mongodb://mongodb:27017/filehost
       - JWT_SECRET=changeme
       - MAX_FILE_SIZE=1000000000000  # 100MB in bytes
+    volumes:
+      - storage_data:/app/storage
     ports:
       - "6002:8080"
     depends_on:
@@ -40,3 +42,5 @@ networks:
 
 volumes:
   mongodb_data:
+  storage_data:
+    driver: local
