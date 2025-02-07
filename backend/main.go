@@ -97,75 +97,79 @@ func main() {
 	// CORS middleware - Apply it before any routes
 	r.Use(corsMiddleware())
 
-	// Public routes
-	r.POST("/login", handleLogin)
-	
-	// Protected routes
-	auth := r.Group("/")
-	auth.Use(authMiddleware())
+	// Group all routes under /api
+	api := r.Group("/api")
 	{
-		// File management
-		auth.POST("/upload", func(c *gin.Context) {
-			file, err := c.FormFile("file")
-			if err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "No file provided"})
-				return
-			}
+		// Public routes
+		api.POST("/login", handleLogin)
 
-			duration := c.PostForm("duration")
-			password := c.PostForm("password")
-
-			fileInfo, err := fileService.uploadFile(c, file, duration, password)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
-			}
-
-			c.JSON(http.StatusOK, fileInfo)
-		})
-
-		auth.GET("/files", func(c *gin.Context) {
-			files, err := fileService.listFiles()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
-			}
-			c.JSON(http.StatusOK, files)
-		})
-
-		auth.DELETE("/files/:id", func(c *gin.Context) {
-			id := c.Param("id")
-			err := fileService.deleteFile(id)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-				return
-			}
-			c.Status(http.StatusOK)
-		})
-
-		// Admin routes
-		admin := auth.Group("/admin")
-		admin.Use(adminMiddleware())
+		// Protected routes
+		auth := api.Group("/")
+		auth.Use(authMiddleware())
 		{
-			admin.GET("/users", handleListUsers)
-			admin.POST("/users", handleCreateUser)
-			admin.PUT("/users/:id", handleUpdateUser)
-			admin.DELETE("/users/:id", handleDeleteUser)
-			admin.PUT("/users/:id/password", handleChangePassword)
+			// File management
+			auth.POST("/upload", func(c *gin.Context) {
+				file, err := c.FormFile("file")
+				if err != nil {
+					c.JSON(http.StatusBadRequest, gin.H{"error": "No file provided"})
+					return
+				}
+
+				duration := c.PostForm("duration")
+				password := c.PostForm("password")
+
+				fileInfo, err := fileService.uploadFile(c, file, duration, password)
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+					return
+				}
+
+				c.JSON(http.StatusOK, fileInfo)
+			})
+
+			auth.GET("/files", func(c *gin.Context) {
+				files, err := fileService.listFiles()
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+					return
+				}
+				c.JSON(http.StatusOK, files)
+			})
+
+			auth.DELETE("/files/:id", func(c *gin.Context) {
+				id := c.Param("id")
+				err := fileService.deleteFile(id)
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+					return
+				}
+				c.Status(http.StatusOK)
+			})
+
+			// Admin routes
+			admin := auth.Group("/admin")
+			admin.Use(adminMiddleware())
+			{
+				admin.GET("/users", handleListUsers)
+				admin.POST("/users", handleCreateUser)
+				admin.PUT("/users/:id", handleUpdateUser)
+				admin.DELETE("/users/:id", handleDeleteUser)
+				admin.PUT("/users/:id/password", handleChangePassword)
+			}
 		}
+
+		// File download endpoint remains public but under /api
+		api.GET("/files/:id", func(c *gin.Context) {
+			id := c.Param("id")
+			password := c.Query("password")
+
+			err := fileService.serveFile(c, id, password)
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"error": "File not found or incorrect password"})
+				return
+			}
+		})
 	}
-
-	// File download endpoint remains public
-	r.GET("/files/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		password := c.Query("password")
-
-		err := fileService.serveFile(c, id, password)
-		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "File not found or incorrect password"})
-			return
-		}
-	})
 
 	// Start server
 	if err := r.Run(":8080"); err != nil {
