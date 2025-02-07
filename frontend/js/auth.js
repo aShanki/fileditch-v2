@@ -14,9 +14,10 @@ class Auth {
     initializeEventListeners() {
         const loginForm = document.getElementById('loginForm');
         if (loginForm) {
-            loginForm.addEventListener('submit', (e) => {
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                this.login();
+                await this.login();
+                return false;
             });
         }
 
