@@ -14,8 +14,8 @@ class FileHostUI {
         this.progressCircle = document.querySelector('.progress-circle-fill');
         this.progressFilename = document.querySelector('.progress-filename');
         this.apiBaseUrl = window.location.hostname === 'localhost' 
-            ? 'http://localhost:6002'
-            : 'https://fileditch.ashank.tech';
+            ? 'http://localhost:6002/api'
+            : 'https://fileditch.ashank.tech/api';
         
         this.checkAuth();
         this.addLogoutButton();
