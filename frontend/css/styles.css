@@ -1,0 +1,907 @@
+:root {
+    --primary-color: #7C3AED;
+    --primary-hover: #8B5CF6;
+    --secondary-color: #4F46E5;
+    --background-color: #111827;
+    --surface-color: #1F2937;
+    --text-color: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --border-color: #374151;
+    --success-color: #059669;
+    --error-color: #DC2626;
+    --button-border: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    --button-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --button-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --button-shadow-active: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+    --glassmorphism: rgba(255, 255, 255, 0.03);
+    --focus-ring: 0 0 0 2px var(--background-color), 0 0 0 4px var(--primary-color);
+    --focus-ring-primary: 0 0 0 2px var(--background-color), 0 0 0 4px var(--primary-color);
+    --focus-ring-error: 0 0 0 2px var(--background-color), 0 0 0 4px var(--error-color);
+    --focus-ring-success: 0 0 0 2px var(--background-color), 0 0 0 4px var(--success-color);
+    --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-duration: 200ms;
+    --ripple-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: var(--background-color);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.upload-section {
+    background: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.drag-drop-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(124, 58, 237, 0.05);
+}
+
+.drag-drop-area:hover {
+    border-color: var(--primary-color);
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.drag-drop-area.dragover {
+    border-color: var(--primary-color);
+    background: rgba(124, 58, 237, 0.15);
+    transform: scale(1.01);
+}
+
+.file-options {
+    margin-top: 1.5rem;
+}
+
+.option-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+select, input {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: border-color 0.3s ease;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+}
+
+.upload-button {
+    composes: button-base;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    background: var(--primary-color);
+    border: none;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.upload-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.upload-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--button-shadow-hover);
+}
+
+.upload-button:hover::before {
+    left: 100%;
+}
+
+.upload-button:active {
+    transform: translateY(0);
+    box-shadow: var(--button-shadow-active);
+}
+
+.upload-button .button-icon {
+    transition: transform 0.2s ease;
+}
+
+.upload-button:hover .button-icon {
+    transform: translate(2px, -2px);
+}
+
+.files-section {
+    background: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border-color);
+}
+
+.files-section h2 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.files-list {
+    margin-top: 1rem;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s ease;
+    position: relative;
+    transition: 
+        transform var(--animation-duration) var(--transition-timing),
+        background-color var(--animation-duration) var(--transition-timing);
+}
+
+.file-item:hover {
+    background: rgba(124, 58, 237, 0.05);
+    transform: translateY(-1px);
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--animation-duration) var(--transition-timing);
+    background: linear-gradient(90deg, var(--glassmorphism), transparent);
+    pointer-events: none;
+}
+
+.file-item:hover::before {
+    opacity: 1;
+}
+
+.progress-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.progress-overlay.hidden {
+    display: none;
+}
+
+.progress-container {
+    background: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid var(--border-color);
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.file-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.file-icon {
+    font-size: 2rem;
+}
+
+.file-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.file-size {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.file-hint {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.highlight {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    composes: button-base;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--text-secondary);
+    border: none;
+    background: transparent;
+}
+
+.toggle-password:hover {
+    color: var(--text-color);
+    background: var(--glassmorphism);
+}
+
+.action-button {
+    composes: button-base;
+    padding: 0.5rem 1rem;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+}
+
+.action-button:hover {
+    border-color: var(--text-secondary);
+    background: var(--glassmorphism);
+    transform: translateY(-1px);
+}
+
+.action-button:active {
+    transform: translateY(0);
+}
+
+.action-button.delete {
+    color: var(--error-color);
+}
+
+.action-button.delete:hover {
+    border-color: var(--error-color);
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    font-size: 0.875rem;
+    letter-spacing: -0.025em;
+    animation: slideIn var(--animation-duration) var(--transition-timing);
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast-success {
+    background: var(--success-color);
+}
+
+.toast-error {
+    background: var(--error-color);
+}
+
+.toast-info {
+    background: var(--primary-color);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+    transition: opacity var(--animation-duration) var(--transition-timing);
+}
+
+.empty-state.hidden {
+    display: none;
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-hint {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .upload-section, .files-section {
+        padding: 1.5rem;
+    }
+}
+
+/* Improve accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Button Base Styles */
+.button-base {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    user-select: none;
+    box-shadow: var(--button-border), var(--button-shadow);
+    background: var(--glassmorphism);
+    transform-origin: center;
+    overflow: hidden;
+    transition: 
+        transform var(--animation-duration) var(--transition-timing),
+        background-color var(--animation-duration) var(--transition-timing),
+        box-shadow var(--animation-duration) var(--transition-timing),
+        border-color var(--animation-duration) var(--transition-timing);
+}
+
+.button-base:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.button-base:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button-base:active {
+    transform: scale(0.98);
+}
+
+/* Loading States */
+.button-base.loading {
+    position: relative;
+    cursor: default;
+    overflow: hidden;
+}
+
+.button-base.loading::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    bottom: 0;
+    left: -100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+/* Hover Effects */
+@media (hover: hover) {
+    .button-base:hover {
+        transform: translateY(-1px);
+    }
+    
+    .button-base:active {
+        transform: translateY(0);
+    }
+    
+    .button-base[data-state="loading"]:hover {
+        transform: none;
+    }
+}
+
+/* Add to existing CSS */
+.button-content,
+.button-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.button-loading {
+    display: none;
+}
+
+[data-state="loading"] .button-content {
+    display: none;
+}
+
+[data-state="loading"] .button-loading {
+    display: inline-flex;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    transform-origin: center;
+    transition: transform 0.2s ease;
+}
+
+.spinner-circle {
+    stroke-linecap: round;
+    animation: spinner-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinner-dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
+
+.progress-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.progress-circle {
+    width: 36px;
+    height: 36px;
+    transform: rotate(-90deg);
+}
+
+.progress-circle-bg,
+.progress-circle-fill {
+    fill: none;
+    stroke-width: 2.8;
+}
+
+.progress-circle-bg {
+    stroke: var(--border-color);
+}
+
+.progress-circle-fill {
+    stroke: var(--primary-color);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+    stroke-dasharray: 100 100;
+    stroke-dasharray: 100;
+    transition: stroke-dashoffset 600ms var(--transition-timing);
+}
+
+.progress-info {
+    flex: 1;
+}
+
+.progress-filename {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Button States */
+.upload-button[data-state="success"] {
+    background: var(--success-color);
+}
+
+.upload-button[data-state="error"] {
+    background: var(--error-color);
+}
+
+/* Success Animation */
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.upload-button[data-state="success"] .button-icon {
+    animation: checkmark 0.2s ease-in-out forwards;
+}
+
+/* Error Animation */
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-4px);
+    }
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+.upload-button[data-state="error"] {
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Keyboard Focus Styles */
+.upload-button:focus-visible {
+    box-shadow: var(--focus-ring-primary);
+}
+
+.upload-button[data-state="success"]:focus-visible {
+    box-shadow: var(--focus-ring-success);
+}
+
+.upload-button[data-state="error"]:focus-visible {
+    box-shadow: var(--focus-ring-error);
+}
+
+.action-button:focus-visible {
+    box-shadow: var(--focus-ring-primary);
+}
+
+.action-button.delete:focus-visible {
+    box-shadow: var(--focus-ring-error);
+}
+
+/* Button Icon Animations */
+.action-button:hover .button-icon {
+    transform: translateX(2px);
+}
+
+.action-button.delete:hover .button-icon {
+    transform: translateX(0) scale(1.1);
+}
+
+/* Keyboard Navigation Indicator */
+body:not(.using-mouse) *:focus {
+    outline: none;
+    box-shadow: var(--focus-ring-primary);
+}
+
+/* Smooth Transitions for States */
+.button-base[data-state] {
+    transition: all var(--animation-duration) var(--transition-timing), 
+                background-color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+/* Improved Loading State */
+.button-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+[data-state="loading"]:hover .spinner {
+    transform: scale(1.1);
+}
+
+/* Interactive Feedback */
+.action-button:active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--ripple-color);
+    transform: scale(0);
+    pointer-events: none;
+    width: 100px;
+    height: 100px;
+    margin: -50px;
+    animation: rippleEffect 600ms var(--transition-timing);
+}
+
+@keyframes rippleEffect {
+    0% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Progress and File Interactions */
+.progress-circle-fill {
+    stroke-dasharray: 100;
+    transition: stroke-dashoffset 600ms var(--transition-timing);
+}
+
+/* Empty State Animation */
+.empty-state {
+    transition: opacity var(--animation-duration) var(--transition-timing);
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-hint {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Toast Animations */
+.toast {
+    animation: slideIn var(--animation-duration) var(--transition-timing);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-50%) translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Upload Button Success/Error States */
+.upload-button[data-state="success"],
+.upload-button[data-state="error"] {
+    transition: 
+        background-color var(--animation-duration) var(--transition-timing),
+        transform 600ms var(--transition-timing);
+}
+
+.upload-button[data-state="success"] .button-icon,
+.upload-button[data-state="error"] .button-icon {
+    animation: iconPop 400ms var(--transition-timing);
+}
+
+@keyframes iconPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* Improved Focus Styles */
+:focus {
+    outline: none;
+    transition: box-shadow var(--animation-duration) var(--transition-timing);
+}
+
+/* Selection Style */
+::selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+    .ripple {
+        display: none;
+    }
+    
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Add modern SVG icon styles */
+.button-icon svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--animation-duration) var(--transition-timing);
+}
+
+/* Icon animations */
+.upload-button[data-state="idle"] .button-icon {
+    opacity: 0.8;
+}
+
+.upload-button[data-state="idle"]:hover .button-icon {
+    opacity: 1;
+    transform: translate(2px, -2px);
+}
+
+.upload-button[data-state="success"] .button-icon,
+.upload-button[data-state="error"] .button-icon {
+    opacity: 1;
+}
+
+/* Improve spinner animation */
+.spinner {
+    stroke-width: 2.5;
+    animation: spin 1s var(--transition-timing) infinite;
+}
+
+.spinner-circle {
+    opacity: 0.8;
+}
+
+/* Custom upload progress circle */
+.progress-circle {
+    transform: rotate(-90deg);
+    transform-origin: center;
+}
+
+.progress-circle-bg {
+    stroke: var(--background-color);
+    opacity: 0.2;
+}
+
+.progress-circle-fill {
+    stroke: currentColor;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 2px var(--primary-color));
+}
+
+/* Inline button icons */
+.action-button .button-icon {
+    opacity: 0.7;
+    transition: all var(--animation-duration) var(--transition-timing);
+}
+
+.action-button:hover .button-icon {
+    opacity: 1;
+}
+
+/* Success/error icons */
+[data-state="success"] .button-icon svg,
+[data-state="error"] .button-icon svg {
+    stroke-width: 3;
+    filter: drop-shadow(0 0 2px currentColor);
+}

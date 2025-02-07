@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Host</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="theme-color" content="#111827">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>File Host</h1>
+            <p class="subtitle">Secure file sharing made simple</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <form id="uploadForm" class="upload-form">
+                    <div class="drag-drop-area" id="dragDropArea" data-state="idle">
+                        <div class="upload-icon">📁</div>
+                        <p>Drag & drop files here or <span class="highlight">click to select</span></p>
+                        <p class="file-hint">Supports any file type</p>
+                        <input type="file" id="fileInput" hidden>
+                    </div>
+
+                    <div class="file-options">
+                        <div class="option-group">
+                            <label for="duration">Storage Duration</label>
+                            <select id="duration" required>
+                                <option value="1h">1 Hour</option>
+                                <option value="1d">1 Day</option>
+                                <option value="7d">7 Days</option>
+                                <option value="30d">30 Days</option>
+                                <option value="permanent">Permanent</option>
+                            </select>
+                        </div>
+
+                        <div class="option-group">
+                            <label for="password">Password Protection (optional)</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="password" placeholder="Leave empty for no password">
+                                <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                    <span class="icon">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="upload-button button-base" data-state="idle">
+                        <span class="button-content">
+                            <span class="button-text">Upload File</span>
+                            <span class="button-icon">→</span>
+                        </span>
+                        <span class="button-loading">
+                            <svg class="spinner" viewBox="0 0 24 24">
+                                <circle class="spinner-circle" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3"/>
+                            </svg>
+                            <span>Uploading...</span>
+                        </span>
+                    </button>
+                </form>
+            </section>
+
+            <section class="files-section">
+                <h2>Your Uploads</h2>
+                <div id="filesList" class="files-list">
+                    <div class="empty-state hidden">
+                        <div class="empty-icon">📁</div>
+                        <p>No files uploaded yet</p>
+                        <p class="empty-hint">Files you upload will appear here</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div id="uploadProgress" class="progress-overlay hidden">
+            <div class="progress-container">
+                <div class="progress-content">
+                    <svg class="progress-circle" viewBox="0 0 36 36">
+                        <path class="progress-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path class="progress-circle-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                    <div class="progress-info">
+                        <p class="progress-text">Uploading...</p>
+                        <p class="progress-percentage">0%</p>
+                    </div>
+                </div>
+                <div class="progress-filename"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
