@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - File Host</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="theme-color" content="#111827">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Panel</h1>
+            <p class="subtitle">User Management</p>
+            <nav class="admin-nav">
+                <button class="nav-button active" data-view="users">Users</button>
+                <button class="nav-button" onclick="location.href='index.html'">File Manager</button>
+                <button class="nav-button" onclick="app.logout()">Logout</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="admin-section">
+                <div class="admin-header">
+                    <h2>Users</h2>
+                    <button class="button-base add-user-button" onclick="app.showAddUserModal()">
+                        <span class="button-content">
+                            <svg class="button-icon" viewBox="0 0 24 24" width="14" height="14">
+                                <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                            <span>Add User</span>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="users-list" id="usersList">
+                    <!-- Users will be loaded here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Add User Modal -->
+        <div id="addUserModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Add New User</h3>
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="newUsername">Username</label>
+                        <input type="text" id="newUsername" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">Password</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isAdmin">
+                            Admin privileges
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="button-base" onclick="app.hideAddUserModal()">Cancel</button>
+                        <button type="submit" class="button-base primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit User Modal -->
+        <div id="editUserModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Edit User</h3>
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" id="editUsername" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editPassword">New Password (leave blank to keep current)</label>
+                        <input type="password" id="editPassword">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="editIsAdmin">
+                            Admin privileges
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="button-base" onclick="app.hideEditUserModal()">Cancel</button>
+                        <button type="submit" class="button-base primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

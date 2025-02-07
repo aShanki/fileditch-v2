@@ -8,7 +8,7 @@ services:
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/filehost
       - JWT_SECRET=changeme
-      - MAX_FILE_SIZE=100000000  # 100MB in bytes
+      - MAX_FILE_SIZE=1000000000000  # 100MB in bytes
     ports:
       - "6002:8080"
     depends_on:

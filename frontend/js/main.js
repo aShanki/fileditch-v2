@@ -17,9 +17,51 @@ class FileHostUI {
             ? 'http://localhost:6002'
             : 'https://fileditch.ashank.tech';
         
+        this.checkAuth();
+        this.addLogoutButton();
         this.initializeEventListeners();
         this.loadExistingFiles();
         this.initializeInteractionMode();
+    }
+
+    checkAuth() {
+        // Skip auth check for login page
+        if (window.location.pathname.includes('login.html')) {
+            return;
+        }
+
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        // Add token to API requests
+        this.apiHeaders = {
+            'Authorization': `Bearer ${token}`,
+        };
+    }
+
+    addLogoutButton() {
+        const header = document.querySelector('header');
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+        
+        const nav = document.createElement('nav');
+        nav.className = 'main-nav';
+        nav.innerHTML = `
+            ${isAdmin ? '<button class="nav-button" onclick="location.href=\'admin.html\'">Admin Panel</button>' : ''}
+            <button class="nav-button" onclick="app.logout()">Logout</button>
+        `;
+        
+        header.appendChild(nav);
+    }
+
+    logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('isAdmin');
+        window.location.href = '/login.html';
     }
 
     initializeEventListeners() {
@@ -147,6 +189,7 @@ class FileHostUI {
             
             const response = await fetch(`${this.apiBaseUrl}/upload`, {
                 method: 'POST',
+                headers: this.apiHeaders,  // Add auth headers
                 body: formData
             });
             
@@ -232,7 +275,9 @@ class FileHostUI {
 
     async loadExistingFiles() {
         try {
-            const response = await fetch(`${this.apiBaseUrl}/files`);
+            const response = await fetch(`${this.apiBaseUrl}/files`, {
+                headers: this.apiHeaders  // Add auth headers
+            });
             if (!response.ok) throw new Error('Failed to load files');
             
             const files = await response.json();
@@ -340,7 +385,8 @@ class FileHostUI {
         
         try {
             const response = await fetch(`${this.apiBaseUrl}/files/${fileId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: this.apiHeaders  // Add auth headers
             });
             if (!response.ok) throw new Error('Delete failed');
             
