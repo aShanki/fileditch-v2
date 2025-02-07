@@ -1,8 +1,8 @@
 class Auth {
     constructor() {
         this.apiBaseUrl = window.location.hostname === 'localhost' 
-            ? 'http://localhost:6002'
-            : 'https://fileditch.ashank.tech';
+            ? 'http://localhost:6002/api'
+            : 'https://fileditch.ashank.tech/api';
         
         this.token = localStorage.getItem('token');
         this.isAdmin = localStorage.getItem('isAdmin') === 'true';
