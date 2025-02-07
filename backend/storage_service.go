@@ -3,7 +3,6 @@ package main
 import (
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
 
@@ -19,15 +18,10 @@ type LocalStorageService struct {
 }
 
 func newLocalStorageService() *LocalStorageService {
-	// Create storage directory if it doesn't exist with sudo
-	storagePath := "/tmp/filehost"
-	cmd := exec.Command("sudo", "mkdir", "-p", storagePath)
-	if err := cmd.Run(); err != nil {
-		panic(err)
-	}
-	// Set permissions to allow the application to read/write
-	cmd = exec.Command("sudo", "chmod", "777", storagePath)
-	if err := cmd.Run(); err != nil {
+	// Use a Docker volume mounted path that's already set up with correct permissions
+	storagePath := "/app/storage"
+	// Create directory if it doesn't exist
+	if err := os.MkdirAll(storagePath, 0755); err != nil {
 		panic(err)
 	}
 	return &LocalStorageService{storagePath: storagePath}
@@ -42,13 +36,7 @@ func (s *LocalStorageService) Store(id string, reader io.Reader) error {
 	defer file.Close()
 
 	_, err = io.Copy(file, reader)
-	if err != nil {
-		return err
-	}
-
-	// Set proper permissions with sudo
-	cmd := exec.Command("sudo", "chmod", "644", path)
-	return cmd.Run()
+	return err
 }
 
 func (s *LocalStorageService) Get(id string) (io.ReadCloser, error) {
@@ -58,8 +46,7 @@ func (s *LocalStorageService) Get(id string) (io.ReadCloser, error) {
 
 func (s *LocalStorageService) Delete(id string) error {
 	path := filepath.Join(s.storagePath, id)
-	cmd := exec.Command("sudo", "rm", "-f", path)
-	return cmd.Run()
+	return os.Remove(path)
 }
 
 // CloudStorageService is a placeholder implementation for cloud storage
